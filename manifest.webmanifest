@@ -1,15 +1,14 @@
 {
-  "name": "Canevas WPA pour l'IA",
-  "short_name": "Canevas WPA",
-  "description": "Canevas pédagogique pour préparer une demande de Webapp WPA/PWA avec l'IA.",
+  "name": "Canevas WPA pour l'IA — N'EPS",
+  "short_name": "Canevas IA",
+  "description": "Générateur de prompt pédagogique pour enseignants EPS",
   "start_url": "./",
-  "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#183b56",
-  "orientation": "any",
+  "background_color": "#1a3a5c",
+  "theme_color": "#1a3a5c",
+  "orientation": "portrait",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }

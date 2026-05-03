@@ -372,6 +372,14 @@ textarea:focus,input[type=text]:focus{
     <button class="btn-hist-save" onclick="sauvegarderHistorique()">💾 Sauvegarder</button>
   </div>
   <div class="historique-liste" id="historiqueListe"></div>
+  <div class="hist-share-row">
+    <p class="aide" style="margin:8px 0 5px">Partager un canevas avec un autre utilisateur :</p>
+    <div class="grid2">
+      <button class="btn-canevas-export" onclick="exporterCanevasJSON()">📤 Exporter (.json)</button>
+      <label class="btn-canevas-import" for="importCanevasFile">📥 Importer (.json)</label>
+      <input type="file" id="importCanevasFile" accept=".json" style="display:none" onchange="importerCanevasJSON(event)">
+    </div>
+  </div>
 </div>
 
 <!-- S1 BESOIN -->
@@ -563,13 +571,7 @@ textarea:focus,input[type=text]:focus{
       <label class="check-card"><input type="checkbox" value="export JSON" data-groupe="exports"><span>📦 JSON</span></label>
       <label class="check-card"><input type="checkbox" value="import JSON" data-groupe="exports"><span>📥 Import JSON</span></label>
     </div>
-    <h3>Partager ce canevas</h3>
-    <p class="aide">Exporte ou importe un canevas complet au format JSON pour le partager avec un autre utilisateur.</p>
-    <div class="grid2">
-      <button class="btn-canevas-export" onclick="exporterCanevasJSON()">📤 Exporter ce canevas (.json)</button>
-      <label class="btn-canevas-import" for="importCanevasFile">📥 Importer un canevas (.json)</label>
-      <input type="file" id="importCanevasFile" accept=".json" style="display:none" onchange="importerCanevasJSON(event)">
-    </div>
+
   </div>
 </div>
 

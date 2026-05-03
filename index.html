@@ -248,6 +248,16 @@ textarea:focus,input[type=text]:focus{
   pointer-events:none;
   filter:drop-shadow(0 2px 4px rgba(0,0,0,.1));
 }
+.btn-canevas-export,.btn-canevas-import{
+  display:flex;align-items:center;justify-content:center;
+  border:1.5px solid #3b82f6;border-radius:8px;
+  padding:8px 10px;font-size:12px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+  background:#eff6ff;color:#1d4ed8;
+  transition:background .15s;text-align:center;
+}
+.btn-canevas-export:hover,.btn-canevas-import:hover{background:#dbeafe}
+.btn-canevas-export{background:linear-gradient(135deg,#eff6ff,#dbeafe)}
 .bouton-copier{
   width:100%;border:none;border-radius:12px;padding:13px 16px;
   background:linear-gradient(135deg,#059669,#10b981,#34d399);
@@ -312,7 +322,17 @@ textarea:focus,input[type=text]:focus{
   .grid3{grid-template-columns:1fr 1fr}
   .grid2{grid-template-columns:1fr 1fr}
   .precision-row{grid-template-columns:1fr}
-  .bouton-copier{font-size:14px;padding:11px}
+  .btn-canevas-export,.btn-canevas-import{
+  display:flex;align-items:center;justify-content:center;
+  border:1.5px solid #3b82f6;border-radius:8px;
+  padding:8px 10px;font-size:12px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+  background:#eff6ff;color:#1d4ed8;
+  transition:background .15s;text-align:center;
+}
+.btn-canevas-export:hover,.btn-canevas-import:hover{background:#dbeafe}
+.btn-canevas-export{background:linear-gradient(135deg,#eff6ff,#dbeafe)}
+.bouton-copier{font-size:14px;padding:11px}
   .robot-header{width:48px;height:48px}
   .robot-above-btn{width:40px}
 }
@@ -522,9 +542,9 @@ textarea:focus,input[type=text]:focus{
     </div>
     <h3>Taille des textes</h3>
     <div class="grid3">
-      <label class="check-card"><input type="checkbox" value="taille de texte normale" data-groupe="tailleTexte"><span>Aa Normale</span></label>
-      <label class="check-card"><input type="checkbox" value="grand texte pour lisibilité en gymnase" data-groupe="tailleTexte"><span>Aa Grand</span></label>
-      <label class="check-card"><input type="checkbox" value="très grand texte pour lecture à distance" data-groupe="tailleTexte"><span>Aa Très grand</span></label>
+      <label class="check-card"><input type="checkbox" value="taille de texte normale" data-groupe="tailleTexte"><span>Police normale</span></label>
+      <label class="check-card"><input type="checkbox" value="grand texte pour lisibilité en gymnase" data-groupe="tailleTexte"><span>Police grande</span></label>
+      <label class="check-card"><input type="checkbox" value="très grand texte pour lecture à distance" data-groupe="tailleTexte"><span>Police très grande</span></label>
     </div>
   </div>
 </div>
@@ -542,6 +562,13 @@ textarea:focus,input[type=text]:focus{
       <label class="check-card"><input type="checkbox" value="export PNG" data-groupe="exports"><span>🖼 PNG</span></label>
       <label class="check-card"><input type="checkbox" value="export JSON" data-groupe="exports"><span>📦 JSON</span></label>
       <label class="check-card"><input type="checkbox" value="import JSON" data-groupe="exports"><span>📥 Import JSON</span></label>
+    </div>
+    <h3>Partager ce canevas</h3>
+    <p class="aide">Exporte ou importe un canevas complet au format JSON pour le partager avec un autre utilisateur.</p>
+    <div class="grid2">
+      <button class="btn-canevas-export" onclick="exporterCanevasJSON()">📤 Exporter ce canevas (.json)</button>
+      <label class="btn-canevas-import" for="importCanevasFile">📥 Importer un canevas (.json)</label>
+      <input type="file" id="importCanevasFile" accept=".json" style="display:none" onchange="importerCanevasJSON(event)">
     </div>
   </div>
 </div>
@@ -723,6 +750,40 @@ function extraireEtCopier(){
   navigator.clipboard.writeText(txt)
     .then(()=>{const m=document.getElementById("message");m.style.display="block";setTimeout(()=>m.style.display="none",2500);})
     .catch(()=>alert("Prompt généré — copie-le manuellement ci-dessous."));
+}
+
+function exporterCanevasJSON(){
+  const etat = collecterEtat();
+  const blob = new Blob([JSON.stringify(etat, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'canevas-neps-' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importerCanevasJSON(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const data = JSON.parse(e.target.result);
+      if(!confirm('Importer ce canevas ? Le formulaire actuel sera remplacé.')) return;
+      appliquerEtat(data);
+      majInterface();
+      majProgression();
+      sauvegarder();
+      alert('✅ Canevas importé avec succès !');
+    } catch(err) {
+      alert('❌ Fichier JSON invalide. Vérifie que c\'est bien un canevas N\'EPS.');
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
 }
 
 document.addEventListener("input",()=>{sauvegarder();majProgression();});
